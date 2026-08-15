@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Se você usar este repositório, cite-o por meio destes metadados."
+title: "CNBI Synthetic Benchmarks"
+type: software
+authors:
+  - alias: LimaGV
+year: 2026
+license: MIT
+repository-code: "https://github.com/LimaGV/CNBI-Synthetic-Benchmarks"

@@ -1,0 +1,16 @@
+{
+  "mode": "PILOT",
+  "scenario_objectives": [4, 12],
+  "correlation_targets": {"medium": 0.60},
+  "correlation_tolerance": 0.03,
+  "sobol_calibration_points": 50000,
+  "reference_points": 20000,
+  "final_seeds": [101, 102],
+  "calibration_seeds": [1, 2, 3],
+  "parallel_workers": 3,
+  "run_tuning": true,
+  "run_optimizers": true,
+  "tuning_budget_cap": 2000,
+  "hv_samples": 100000,
+  "checkpoint": true
+}

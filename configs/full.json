@@ -1,0 +1,16 @@
+{
+  "mode": "FULL",
+  "requires_explicit_confirmation": true,
+  "scenario_objectives": [4, 6, 12],
+  "correlation_targets": {"low": 0.25, "medium": 0.60, "high": 0.85},
+  "correlation_tolerance": 0.03,
+  "sobol_calibration_points": 50000,
+  "reference_points": 100000,
+  "final_seeds": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+  "calibration_seeds": [1, 2, 3],
+  "parallel_workers": 3,
+  "run_tuning": true,
+  "run_optimizers": true,
+  "hv_samples": 1000000,
+  "checkpoint": true
+}
