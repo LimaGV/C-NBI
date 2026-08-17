@@ -87,11 +87,12 @@ def main() -> None:
     assert not missing, f"Execuções ausentes: {sorted(missing)[:10]}"
     invalid_nbi = runs[(runs.method == "NBI") & runs.scenario.str.extract(r"m(\d+)")[0].astype(int).gt(4)]
     assert invalid_nbi.status.eq("STRUCTURALLY_INVALID").all(), "NBI m>4 não registrado como inválido"
-    valid = runs[runs.status.eq("COMPLETED")]
+    analyzable_statuses = {"COMPLETED", "COMPLETED_WITH_INFEASIBLE_SUBPROBLEMS"}
+    valid = runs[runs.status.isin(analyzable_statuses)]
     for _, row in runs[runs.method.isin(["NBI", "CNBI", "VRF-NBI"])].iterrows():
         if row.status == "COMPLETED":
             assert np.isclose(float(row.converged_fraction), 1.0)
-        elif row.status == "COMPLETED_WITH_FAILURES":
+        elif row.status == "COMPLETED_WITH_INFEASIBLE_SUBPROBLEMS":
             assert 0 <= float(row.converged_fraction) < 1
     assert pd.to_numeric(runs.gradient_evaluations, errors="coerce").fillna(0).ge(0).all()
 
@@ -132,11 +133,15 @@ def main() -> None:
     require_columns(vrf, {"loadings_original_json", "loadings_oriented_json", "dominant_response_json", "dominant_loading_json", "sign_applied_json", "scores_before_json", "scores_after_json", "sign_invariance_verified"}, "vrf_diagnostics")
     assert vrf.sign_invariance_verified.astype(str).str.lower().eq("true").all()
     ledger = pd.read_csv(tables / f"{args.mode.lower()}_cnbi_subproblems.csv")
-    require_columns(ledger, {"scenario", "seed", "combination", "k", "beta_id", "beta", "delta", "execution_order", "chosen_start", "attempts", "eq_inf", "sphere_violation", "t", "solver_success", "accepted", "aggregate_checkpoint"}, "cnbi_subproblems")
+    require_columns(ledger, {"scenario", "seed", "combination", "k", "beta_id", "beta", "delta", "execution_order", "chosen_start", "attempts", "eq_inf", "sphere_violation", "t", "solver_success", "accepted", "subproblem_status", "aggregate_checkpoint"}, "cnbi_subproblems")
     assert set(zip(ledger.scenario, ledger.seed.astype(int))) == expected_pairs
     assert set(ledger.groupby("k").delta.first().round(2).to_dict().items()) <= {(2, .10), (3, .10), (4, .20), (5, .50)}
     accepted = ledger[ledger.success.astype(str).str.lower().eq("true")]
     assert accepted.eq_inf.le(1e-5).all() and accepted.sphere_violation.le(1e-8).all()
+    assert accepted.subproblem_status.eq("COMPLETED").all()
+    infeasible = ledger[ledger.subproblem_status.eq("NO_FEASIBLE_INTERSECTION")]
+    assert infeasible.success.astype(str).str.lower().eq("false").all()
+    assert set(ledger.subproblem_status) <= {"COMPLETED", "NO_FEASIBLE_INTERSECTION"}
     assert ledger.attempts.ge(0).all() and ledger.chosen_start.astype(str).str.len().gt(0).all()
     for (scenario, seed), group in ledger.groupby(["scenario", "seed"]):
         checkpoint = ROOT / group.aggregate_checkpoint.iloc[0]

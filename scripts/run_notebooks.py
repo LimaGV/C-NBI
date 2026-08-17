@@ -1,4 +1,4 @@
-"""Execute the scientific notebooks sequentially in SMOKE or PILOT mode."""
+"""Execute the scientific notebooks sequentially in audited campaign modes."""
 from __future__ import annotations
 
 import argparse
@@ -62,7 +62,7 @@ def execute_with_resource_monitor(path: Path, root_pid: int) -> tuple[int, float
         nb = nbformat.read(path, as_version=4)
         NotebookClient(
             nb,
-            timeout=7200,
+            timeout=None if os.environ.get("CNBI_MODE") == "FULL" else 7200,
             kernel_name="python3",
             resources={"metadata": {"path": str(ROOT)}},
         ).execute()
@@ -74,10 +74,13 @@ def execute_with_resource_monitor(path: Path, root_pid: int) -> tuple[int, float
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["SCENARIO_AUDIT", "SMOKE", "PILOT"], default="SMOKE")
+    parser.add_argument(
+        "--mode", choices=["SCENARIO_AUDIT", "SMOKE", "PILOT", "FULL"], default="SMOKE"
+    )
+    parser.add_argument("--confirm-full", action="store_true")
     args = parser.parse_args()
-    if args.mode == "FULL":
-        raise RuntimeError("FULL requer confirmação explícita e não é aceito por este executor.")
+    if args.mode == "FULL" and not args.confirm_full:
+        raise RuntimeError("FULL requer --confirm-full após autorização explícita do usuário.")
     os.environ["CNBI_MODE"] = args.mode
     for key in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
         os.environ[key] = "1"
@@ -121,9 +124,9 @@ def main() -> None:
             "includes": ["scenario_generation", "deterministic_methods", "tuning", "evolutionary_runs", "notebook_04", "filtering", "equalization", "statistics", "runner_and_descendants"],
         }
         (tables / "pilot_end_to_end_resources.json").write_text(json.dumps(resource, indent=2), encoding="utf-8")
-    if args.mode == "PILOT":
+    if args.mode in {"PILOT", "FULL"}:
         subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "validate_run.py"), "--mode", "PILOT"],
+            [sys.executable, str(ROOT / "scripts" / "validate_run.py"), "--mode", args.mode],
             cwd=ROOT,
             check=True,
         )
