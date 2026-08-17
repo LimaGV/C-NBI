@@ -22,6 +22,6 @@ def sanitize(path: Path) -> None:
 
 
 if __name__ == "__main__":
-    for notebook in sorted((ROOT / "notebooks").rglob("*.ipynb")):
+    for notebook in sorted((ROOT / "notebooks").glob("[0-9][1-4]_*.ipynb")):
         sanitize(notebook)
     print("Notebooks sanitizados.")

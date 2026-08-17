@@ -8,7 +8,7 @@ Cada objetivo verdadeiro é a distância quadrática até uma âncora: `f_j(x)=|
 
 Correlação estrutural significa que os objetivos variam juntos por causa da geometria das âncoras, não por ruído correlacionado. Para `m>4`, as respostas verdadeiras centralizadas vivem em um subespaço de dimensão máxima quatro, criando redundância natural. Por isso o repositório registra espectro singular, posto efetivo e índice de redundância.
 
-Os nove cenários cruzam `m={4,6,12}` com correlação alvo baixa (0,25), média (0,60) e alta (0,85). A correlação realizada é sempre exportada. O limite geométrico de posto pode impedir 0,25 para `m=6/12`; esse desvio é diagnosticado, jamais ocultado.
+Os nove cenários cruzam `m={4,6,12}` com correlação alvo baixa (0,25), média (0,60) e alta (0,85). Uma busca determinística multi-início ajusta direções e normas das âncoras, registra as tentativas e exige erro absoluto máximo de 0,03. Nenhum cenário fora da tolerância é renomeado.
 
 ## Região, experimento e incerteza
 
@@ -20,7 +20,7 @@ O CNBI preserva os deltas adaptativos da v0: `k=2:0.10`, `k=3:0.10`, `k=4:0.20`,
 
 ## Fronteira verdadeira e métricas
 
-O conjunto de Pareto em decisões é o casco convexo das âncoras. A referência é amostrada diretamente por tetraedralização volumétrica e coordenadas baricêntricas, sem NSGA ou filtragem para “descobri-la”. A análise calcula GD, IGD, hipervolume pareado, Spacing, Sparsity, factibilidade, convergência, avaliações e tempos, tanto para frentes completas quanto para cardinalidade igual. Os testes finais são Friedman e Wilcoxon pareado contra CNBI com Holm; ausência de significância não é interpretada como equivalência.
+O conjunto de Pareto em decisões é o casco convexo das âncoras. A referência inclui explicitamente todas as âncoras e completa os pontos restantes por tetraedralização volumétrica e coordenadas baricêntricas, sem NSGA. Na avaliação externa, `ideal_true=0` e `nadir_true[j]=max_l ||a_l-a_j||²` são analíticos; dentro dos métodos, permanece a payoff do RSM. A análise calcula GD, IGD, hipervolume pareado, Spacing, Sparsity, factibilidade, convergência, avaliações e tempos, tanto para frentes completas quanto para cardinalidade igual.
 
 ## Instalação
 
@@ -52,10 +52,13 @@ Ordem: notebooks `01`, `03`, `02` e `04`. O notebook `03` mede primeiro o orçam
 
 ```powershell
 python scripts/run_notebooks.py --mode SMOKE
+python scripts/run_notebooks.py --mode SCENARIO_AUDIT
 python scripts/run_notebooks.py --mode PILOT
 ```
 
-`SMOKE` verifica invariantes e não produz resultados científicos. `PILOT` estima custo. `FULL` compreende nove cenários e dez sementes, pode demorar muitas horas e não possui comando automático deliberadamente: edite/execute os notebooks somente após autorização explícita.
+`SCENARIO_AUDIT` valida os nove cenários com 50.000 pontos sem executar otimizadores. `SMOKE` verifica invariantes e não produz resultados científicos. `PILOT` estima custo. `FULL` está bloqueado incondicionalmente no executor e nos notebooks e só pode ser habilitado por alteração versionada após nova autorização explícita.
+
+Checkpoints usam schema e fingerprint, além de modo, cenário, método, dimensão, seed, orçamento, parâmetros e hashes da configuração, âncoras e RSM. Identidade divergente força recálculo. Caminhos públicos são gravados em formato POSIX.
 
 NSGA-III e MOEA/D são calibrados separadamente por `m` apenas na correlação média e sementes 1–3. A configuração vencedora é congelada antes das sementes finais 101–110.
 

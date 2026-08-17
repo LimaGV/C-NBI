@@ -3,10 +3,13 @@ repos:
     rev: 0.8.1
     hooks:
       - id: nbstripout
+        files: ^notebooks/0[1-4]_.*\.ipynb$
   - repo: local
     hooks:
       - id: validate-notebooks
         name: validate notebooks
         entry: python scripts/validate_notebooks.py
-        language: system
+        language: python
+        additional_dependencies:
+          - nbformat==5.10.4
         pass_filenames: false

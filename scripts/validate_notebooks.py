@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import nbformat
+import ast
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +26,10 @@ for path in sorted((ROOT / "notebooks").rglob("*.ipynb")):
                 errors.append(f"{path}: célula {i} contém output")
             if cell.get("execution_count") is not None:
                 errors.append(f"{path}: célula {i} contém execution_count")
+            try:
+                ast.parse(cell.source, filename=f"{path}:cell{i}")
+            except SyntaxError as exc:
+                errors.append(f"{path}: célula {i} não compila: {exc}")
         if ABSOLUTE.search(cell.source):
             errors.append(f"{path}: célula {i} contém caminho pessoal/absoluto")
 

@@ -50,13 +50,18 @@ def main() -> None:
         assert (ROOT / "data" / "reference_fronts" / f"{scenario}_pareto_reference.npz").exists()
 
     tuning_results = pd.read_csv(tuning / "tuning_all_results.csv")
-    require_columns(tuning_results, {"method", "m", "stage", "config_id", "seed", "status", "IGD", "rsm_evaluations"}, "tuning_all_results")
+    require_columns(tuning_results, {"method", "m", "stage", "config_id", "seed", "status", "IGD", "rsm_evaluations", "checkpoint_reused"}, "tuning_all_results")
     for m in cfg["scenario_objectives"]:
         for method in ("NSGAIII", "MOEAD"):
             subset = tuning_results[(tuning_results.m == m) & (tuning_results.method == method)]
             required_stages = {"A", "B"} | ({"C"} if method == "MOEAD" else set())
             assert required_stages <= set(subset.stage), f"Estágios ausentes para {method}, m={m}"
             assert set(cfg["calibration_seeds"]) <= set(subset.seed.astype(int))
+            coverage = pd.read_csv(tuning / f"stage_b_coverage_{method}_m{m}.csv")
+            assert len(coverage) == 12 and len(coverage.drop_duplicates(["n_partitions", "sbx_probability", "sbx_eta", "pm_eta"])) == 12
+            assert coverage.n_partitions.value_counts().eq(6).all()
+            assert coverage.sbx_probability.value_counts().eq(6).all()
+            assert coverage.sbx_eta.value_counts().eq(4).all() and coverage.pm_eta.value_counts().eq(4).all()
     finalists = pd.read_csv(tuning / "tuning_finalists.csv")
     require_columns(finalists, {"method", "m", "config_id", "seed", "IGD", "HV", "HV_se", "infeasibility", "wall_seconds"}, "tuning_finalists")
     for m in cfg["scenario_objectives"]:
@@ -83,7 +88,11 @@ def main() -> None:
     invalid_nbi = runs[(runs.method == "NBI") & runs.scenario.str.extract(r"m(\d+)")[0].astype(int).gt(4)]
     assert invalid_nbi.status.eq("STRUCTURALLY_INVALID").all(), "NBI m>4 não registrado como inválido"
     valid = runs[runs.status.eq("COMPLETED")]
-    assert valid.status.eq("COMPLETED").all(), "Há métodos válidos não concluídos"
+    for _, row in runs[runs.method.isin(["NBI", "CNBI", "VRF-NBI"])].iterrows():
+        if row.status == "COMPLETED":
+            assert np.isclose(float(row.converged_fraction), 1.0)
+        elif row.status == "COMPLETED_WITH_FAILURES":
+            assert 0 <= float(row.converged_fraction) < 1
     assert pd.to_numeric(runs.gradient_evaluations, errors="coerce").fillna(0).ge(0).all()
 
     det = runs[runs.method.eq("CNBI")].set_index(["scenario", "seed"])
@@ -93,6 +102,9 @@ def main() -> None:
         data = np.load(ROOT / row.checkpoint, allow_pickle=False)
         meta = json.loads(str(data["metadata"]))
         assert int(meta["budget_reference"]) == reference, "EA não usa orçamento CNBI pareado"
+        identity = meta["identity"]
+        assert identity["schema_version"] == 2 and identity["mode"] == args.mode
+        assert identity["budget"] == reference and identity["scenario"] == row.scenario
         method_key = "NSGAIII" if row.method == "NSGA-III" else "MOEAD"
         m = int(str(row.scenario).split("_")[0][1:])
         expected_parameters = chosen[f"{method_key}_m{m}"]
@@ -107,7 +119,9 @@ def main() -> None:
     assert np.allclose(rsm.r2_target, .95) and rsm.noiseless_max_abs_error.max() < 1e-10
     payoff = pd.read_csv(tables / f"{args.mode.lower()}_payoff_diagnostics.csv")
     assert set(zip(payoff.scenario, payoff.seed.astype(int))) == expected_pairs
-    assert payoff.transpose_equivalent.astype(str).str.lower().eq("true").all()
+    require_columns(payoff, {"columns_are_individual_minima", "diagonal_matches_individual_objective", "all_optima_feasible"}, "payoff_diagnostics")
+    assert payoff.columns_are_individual_minima.astype(str).str.lower().eq("true").all()
+    assert payoff.diagonal_matches_individual_objective.astype(str).str.lower().eq("true").all()
     assert payoff.all_optima_feasible.astype(str).str.lower().eq("true").all()
     parallel = pd.read_csv(tables / f"{args.mode.lower()}_parallel_analysis.csv")
     assert set(zip(parallel.scenario, parallel.seed.astype(int))) == expected_pairs
@@ -115,16 +129,21 @@ def main() -> None:
     vrf = pd.read_csv(tables / f"{args.mode.lower()}_vrf_diagnostics.csv")
     assert set(zip(vrf.scenario, vrf.seed.astype(int))) == expected_pairs
     assert vrf.pca_cumulative.ge(.90).all() and vrf.factor_method.eq("principal").all() and vrf.rotation.eq("varimax").all()
+    require_columns(vrf, {"loadings_original_json", "loadings_oriented_json", "dominant_response_json", "dominant_loading_json", "sign_applied_json", "scores_before_json", "scores_after_json", "sign_invariance_verified"}, "vrf_diagnostics")
+    assert vrf.sign_invariance_verified.astype(str).str.lower().eq("true").all()
     ledger = pd.read_csv(tables / f"{args.mode.lower()}_cnbi_subproblems.csv")
-    require_columns(ledger, {"scenario", "seed", "k", "combo", "beta_index", "beta", "delta", "success", "eq_inf", "sphere_violation", "start", "attempts", "aggregate_checkpoint"}, "cnbi_subproblems")
+    require_columns(ledger, {"scenario", "seed", "combination", "k", "beta_id", "beta", "delta", "execution_order", "chosen_start", "attempts", "eq_inf", "sphere_violation", "t", "solver_success", "accepted", "aggregate_checkpoint"}, "cnbi_subproblems")
     assert set(zip(ledger.scenario, ledger.seed.astype(int))) == expected_pairs
     assert set(ledger.groupby("k").delta.first().round(2).to_dict().items()) <= {(2, .10), (3, .10), (4, .20), (5, .50)}
     accepted = ledger[ledger.success.astype(str).str.lower().eq("true")]
     assert accepted.eq_inf.le(1e-5).all() and accepted.sphere_violation.le(1e-8).all()
-    assert ledger.attempts.ge(0).all() and ledger.start.astype(str).str.len().gt(0).all()
+    assert ledger.attempts.ge(0).all() and ledger.chosen_start.astype(str).str.len().gt(0).all()
     for (scenario, seed), group in ledger.groupby(["scenario", "seed"]):
         checkpoint = ROOT / group.aggregate_checkpoint.iloc[0]
-        assert len(group) == len(np.load(checkpoint, allow_pickle=False)["success"])
+        data = np.load(checkpoint, allow_pickle=False)
+        assert len(group) == len(data["success"])
+        assert not group.duplicated(["combination", "beta_id"]).any()
+        assert np.array_equal(group.sort_values("execution_order").beta_id.to_numpy(), data["beta_id"][np.argsort(data["execution_order"])])
 
     metrics = pd.read_csv(tables / f"{args.mode.lower()}_metrics.csv")
     require_columns(metrics, {"scenario", "seed", "method", "comparison", "GD", "IGD", "HV", "HV_se", "Spacing", "Sparsity", "feasible_fraction", "converged_fraction", "rsm_evaluations", "wall_seconds", "cpu_seconds"}, "metrics")
@@ -139,9 +158,12 @@ def main() -> None:
     statistics = pd.read_csv(tables / f"{args.mode.lower()}_statistics.csv")
     assert set(statistics.status) <= {"COMPLETED", "INSUFFICIENT_BLOCKS", "NO_VALID_COMMON_BLOCK"}
 
-    resources = json.loads((tables / f"{args.mode.lower()}_resource_summary.json").read_text(encoding="utf-8"))
-    for key in ("wall_seconds", "cpu_seconds", "peak_rss_bytes", "disk_bytes"):
+    resource_path = tables / ("pilot_end_to_end_resources.json" if args.mode == "PILOT" else f"{args.mode.lower()}_resource_summary.json")
+    resources = json.loads(resource_path.read_text(encoding="utf-8"))
+    for key in (("end_to_end_wall_seconds", "runner_cpu_seconds", "descendant_cpu_seconds", "total_cpu_seconds", "method_wall_seconds_sum", "method_cpu_seconds_sum", "peak_rss_bytes", "disk_bytes") if args.mode == "PILOT" else ("wall_seconds", "cpu_seconds", "peak_rss_bytes", "disk_bytes")):
         assert float(resources[key]) >= 0
+    if args.mode == "PILOT":
+        assert resources["cache_used"] is False and resources["checkpoints_reused"] == 0
     print(f"{args.mode}: manifestos científicos aprovados.")
 
 

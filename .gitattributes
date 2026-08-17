@@ -1,5 +1,5 @@
-*.ipynb filter=nbstripout
 *.ipynb text eol=lf
+notebooks/00_referencias_v0/*.ipynb -text -eol
 *.py text eol=lf
 *.md text eol=lf
 *.json text eol=lf

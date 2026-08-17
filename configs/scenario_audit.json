@@ -1,0 +1,17 @@
+{
+  "mode": "SCENARIO_AUDIT",
+  "scenario_objectives": [4, 6, 12],
+  "correlation_targets": {"low": 0.25, "medium": 0.60, "high": 0.85},
+  "correlation_tolerance": 0.03,
+  "sobol_calibration_points": 50000,
+  "reference_points": 20000,
+  "final_seeds": [],
+  "calibration_seeds": [],
+  "parallel_workers": 1,
+  "run_tuning": false,
+  "run_optimizers": false,
+  "hv_samples": 0,
+  "checkpoint": false,
+  "anchor_search_starts": 12,
+  "anchor_search_maxiter": 350
+}
