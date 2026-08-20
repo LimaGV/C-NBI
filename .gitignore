@@ -24,6 +24,7 @@ results/tables/*
 results/figures/*
 !results/figures/.gitkeep
 results/backups/
+results/logs/
 dist/
 *.parquet
 *.npz
