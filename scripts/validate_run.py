@@ -20,6 +20,125 @@ def require_columns(df: pd.DataFrame, columns: set[str], label: str) -> None:
         raise AssertionError(f"{label}: colunas ausentes: {sorted(missing)}")
 
 
+def validate_cardinality_reduction(tables: Path, metrics: pd.DataFrame, mode: str) -> str:
+    """Validate the FULL-only benchmark and return its reproducible winner."""
+    reduction_prefix = tables / f"{mode.lower()}_cardinality_reduction"
+    reduction_trials = pd.read_csv(Path(f"{reduction_prefix}_trials.csv"))
+    reduction_blocks = pd.read_csv(Path(f"{reduction_prefix}_block_summary.csv"))
+    reduction_comparison = pd.read_csv(Path(f"{reduction_prefix}_comparison.csv"))
+    reduction_selection = json.loads(
+        Path(f"{reduction_prefix}_selection.json").read_text(encoding="utf-8")
+    )
+    reduction_methods = {
+        "Farthest-Point-Sampling",
+        "KMeans-medoid",
+        "MiniBatchKMeans-medoid",
+        "GMM-medoid",
+        "Hierarchical-Ward-medoid",
+    }
+    require_columns(
+        reduction_trials,
+        {
+            "scenario", "seed", "cluster_method", "cluster_seed", "n_original",
+            "n_target", "n_selected", "exact_cardinality", "status", "IGD_true",
+            "retention_IGD", "wall_seconds",
+        },
+        "cardinality_reduction_trials",
+    )
+    require_columns(
+        reduction_comparison,
+        {
+            "cluster_method", "blocks", "exact_block_rate", "median_rank_IGD_true",
+            "mean_rank_IGD_true", "IGD_true_median", "retention_IGD_median",
+            "wall_seconds_median", "exact_trial_rate", "eligible", "wins_IGD",
+        },
+        "cardinality_reduction_comparison",
+    )
+    complete_cnbi = metrics[
+        metrics.comparison.eq("complete") & metrics.method.eq("CNBI")
+    ]
+    assert len(reduction_trials) == 21 * len(complete_cnbi), "Número incorreto de ensaios de redução"
+    assert len(reduction_blocks) == len(reduction_methods) * len(complete_cnbi)
+    assert set(reduction_trials.cluster_method) == reduction_methods
+    assert set(reduction_comparison.cluster_method) == reduction_methods
+    assert reduction_trials.status.eq("COMPLETED").all()
+    assert reduction_trials.exact_cardinality.astype(str).str.lower().eq("true").all()
+    assert reduction_trials.n_selected.astype(int).eq(reduction_trials.n_target.astype(int)).all()
+    assert reduction_comparison.exact_trial_rate.eq(1.0).all()
+    assert reduction_comparison.exact_block_rate.eq(1.0).all()
+    eligible_reductions = reduction_comparison[
+        reduction_comparison.eligible.astype(str).str.lower().eq("true")
+    ].sort_values(
+        [
+            "median_rank_IGD_true", "IGD_true_median", "retention_IGD_median",
+            "wall_seconds_median", "cluster_method",
+        ],
+        kind="mergesort",
+    )
+    assert len(eligible_reductions) == len(reduction_methods)
+    expected_winner = str(eligible_reductions.iloc[0].cluster_method)
+    assert reduction_selection["winner"] == expected_winner, "Seleção da redução não reproduzível"
+    assert set(reduction_selection["methods"]) == reduction_methods
+    assert int(reduction_selection["final_reduction_seed"]) == 42
+    return expected_winner
+
+
+def validate_equalized_figures(
+    figures: Path,
+    metrics: pd.DataFrame,
+    expected_projections: dict[str, dict[str, set[tuple[int, ...]]]],
+    expected_winner: str,
+    mode: str,
+) -> None:
+    """Validate FULL-only equal-cardinality 2D and isometric 3D plates."""
+    equalized_root = figures / "equalized_combined_projections"
+    equalized_manifest = pd.read_csv(
+        equalized_root / f"{mode.lower()}_equalized_projection_manifest.csv"
+    )
+    require_columns(
+        equalized_manifest,
+        {
+            "scenario", "dimension", "projection", "seed", "target_n",
+            "cluster_method", "methods", "plate_png", "plate_pdf", "view_elev",
+            "view_azim",
+        },
+        "equalized_projection_manifest",
+    )
+    assert set(equalized_manifest.scenario) == set(expected_projections)
+    assert equalized_manifest.seed.astype(int).eq(101).all()
+    assert equalized_manifest.cluster_method.eq(expected_winner).all()
+    for scenario, dimensions in expected_projections.items():
+        scenario_complete = metrics[
+            metrics.comparison.eq("complete")
+            & metrics.scenario.eq(scenario)
+            & metrics.seed.astype(int).eq(101)
+        ]
+        valid_methods = set(scenario_complete.method)
+        expected_target = int(scenario_complete.n.min())
+        for dimension, projections in dimensions.items():
+            group = equalized_manifest[
+                equalized_manifest.scenario.eq(scenario)
+                & equalized_manifest.dimension.eq(dimension)
+            ]
+            actual = {
+                tuple(int(value) for value in projection.split("-"))
+                for projection in group.projection
+            }
+            assert actual == projections, f"Projeções equalizadas {dimension} incorretas: {scenario}"
+            assert group.target_n.astype(int).eq(expected_target).all()
+            assert group.methods.map(lambda value: set(value.split("|"))).eq(valid_methods).all()
+            assert group.plate_png.nunique() == 1 and group.plate_pdf.nunique() == 1
+            if dimension == "3D":
+                assert np.allclose(group.view_elev, 35.264)
+                assert np.allclose(group.view_azim, -45.0)
+            else:
+                assert group.view_elev.isna().all() and group.view_azim.isna().all()
+    equalized_paths = set(equalized_manifest.plate_png) | set(equalized_manifest.plate_pdf)
+    for relative in equalized_paths:
+        artifact = ROOT / relative
+        assert artifact.exists() and artifact.stat().st_size > 1000, f"Prancha equalizada ausente/vazia: {relative}"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=["PILOT", "FULL"], required=True)
@@ -153,12 +272,27 @@ def main() -> None:
         assert np.array_equal(group.sort_values("execution_order").beta_id.to_numpy(), data["beta_id"][np.argsort(data["execution_order"])])
 
     metrics = pd.read_csv(tables / f"{args.mode.lower()}_metrics.csv")
-    require_columns(metrics, {"scenario", "seed", "method", "comparison", "GD", "IGD", "HV", "HV_se", "Spacing", "Sparsity", "feasible_fraction", "converged_fraction", "rsm_evaluations", "wall_seconds", "cpu_seconds"}, "metrics")
+    metric_columns = {"scenario", "seed", "method", "comparison", "GD", "IGD", "HV", "HV_se", "Spacing", "Sparsity", "feasible_fraction", "converged_fraction", "rsm_evaluations", "wall_seconds", "cpu_seconds"}
+    if args.mode == "FULL":
+        metric_columns |= {"equalization_method", "equalization_seed"}
+    require_columns(metrics, metric_columns, "metrics")
     assert len(metrics) == 2 * len(valid), "Métricas completas/equalizadas incompletas"
     assert set(metrics.comparison) == {"complete", "equal_cardinality"}
     assert metrics[["GD", "IGD", "HV", "HV_se", "Spacing", "Sparsity"]].apply(np.isfinite).all().all()
     equal = metrics[metrics.comparison.eq("equal_cardinality")]
     assert equal.groupby(["scenario", "seed"]).n.nunique().eq(1).all(), "Cardinalidade não equalizada"
+
+    expected_winner = None
+    if args.mode == "FULL":
+        expected_winner = validate_cardinality_reduction(tables, metrics, args.mode)
+        assert equal.equalization_method.eq(expected_winner).all()
+        assert equal.equalization_seed.astype(int).eq(42).all()
+        complete_targets = (
+            metrics[metrics.comparison.eq("complete")]
+            .groupby(["scenario", "seed"]).n.min().astype(int)
+        )
+        equal_targets = equal.groupby(["scenario", "seed"]).n.first().astype(int)
+        assert equal_targets.equals(complete_targets), "Alvo de cardinalidade não é o mínimo do bloco"
     for suffix in ("summary", "rankings", "statistics"):
         artifact = tables / f"{args.mode.lower()}_{suffix}.csv"
         assert artifact.exists() and artifact.stat().st_size > 2, f"Artefato ausente/vazio: {artifact.name}"
@@ -173,6 +307,11 @@ def main() -> None:
         assert resources["cache_used"] is False and resources["checkpoints_reused"] == 0
 
     figures = ROOT / "results" / "figures"
+    if args.mode == "FULL":
+        reduction_figure_root = figures / "cardinality_reduction"
+        for extension in ("png", "pdf"):
+            reduction_figure = reduction_figure_root / f"{args.mode.lower()}_cardinality_reduction_comparison.{extension}"
+            assert reduction_figure.exists() and reduction_figure.stat().st_size > 1000
     surface_manifest = pd.read_csv(figures / f"{args.mode.lower()}_response_surface_manifest.csv")
     pareto_manifest = pd.read_csv(figures / f"{args.mode.lower()}_true_pareto_manifest.csv")
     require_columns(
@@ -280,6 +419,12 @@ def main() -> None:
     for relative in combined_paths:
         artifact = ROOT / relative
         assert artifact.exists() and artifact.stat().st_size > 1000, f"Projeção combinada ausente/vazia: {relative}"
+
+    if args.mode == "FULL":
+        assert expected_winner is not None
+        validate_equalized_figures(
+            figures, metrics, expected_projections, expected_winner, args.mode
+        )
     print(f"{args.mode}: manifestos científicos aprovados.")
 
 

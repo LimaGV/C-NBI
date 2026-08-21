@@ -75,6 +75,7 @@ O executor atual é sequencial — portanto permanece abaixo do limite de três 
 - `notebooks/05_figuras_cenarios_sinteticos.ipynb`: superfícies RSM, mapas de contorno e projeções das fronteiras de Pareto verdadeiras.
 - `notebooks/06_sobreposicao_fronteiras_metodos.ipynb`: sobreposições separadas de cada método válido sobre a fronteira verdadeira.
 - `notebooks/07_projecoes_comparativas_2D_3D.ipynb`: projeções 2D combinadas e vistas 3D isométricas para os cenários selecionados para o texto.
+- `notebooks/08_clusterizacao_equalizacao_cardinalidade.ipynb`: benchmark de redução (FPS, K-Means, MiniBatch K-Means, GMM e Ward), seleção auditável e recálculo das comparações com cardinalidade igual.
 - `docs/`: método, protocolo e mapeamento célula a célula da v0.
 
 Notebooks são versionados sem outputs; `nbstripout`, pre-commit e CI verificam isso. Checkpoints permitem continuação após interrupção.

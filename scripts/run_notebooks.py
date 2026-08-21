@@ -25,6 +25,7 @@ ORDER = [
     "03_pipeline_CNBI_comparacoes.ipynb",
     "02_calibracao_NSGAIII_MOEAD.ipynb",
     "04_analise_resultados.ipynb",
+    "08_clusterizacao_equalizacao_cardinalidade.ipynb",
     "05_figuras_cenarios_sinteticos.ipynb",
     "06_sobreposicao_fronteiras_metodos.ipynb",
     "07_projecoes_comparativas_2D_3D.ipynb",
@@ -93,6 +94,9 @@ def main() -> None:
     started_cpu = time.process_time()
     order = ORDER[:1] if args.mode == "SCENARIO_AUDIT" else ORDER
     for name in order:
+        if name == "08_clusterizacao_equalizacao_cardinalidade.ipynb" and args.mode != "FULL":
+            print(f"SKIP ({args.mode}): {name} requer os 90 blocos FULL", flush=True)
+            continue
         path = ROOT / "notebooks" / name
         if name == "04_analise_resultados.ipynb":
             os.environ["CNBI_PEAK_RSS_BYTES"] = str(peak_rss)

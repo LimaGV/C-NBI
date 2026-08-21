@@ -14,7 +14,7 @@
 | Orçamento | `RSM-CNBI_orcamento`, 2, 21, 37, 45–47 | uma chamada do vetor completo conta como uma avaliação; moedas separadas | Contador central único | Comparabilidade | Preservado |
 | VRF-NBI | `VRF-NBI(Matheus)`, 5–14; artigo, seções 2.2–2.4 e 4.1 | padronização, PCA ≥90%, FA principal/Varimax, escores, RSM, NBI reduzido | CCD e domínio comuns; `delta=0.10` | Decisões explícitas | Preservado |
 | Métricas | `comparacao_fronteiras`, 4–7 | GD/IGD p=1, HV MC pareado, Spacing e Sparsity por vizinho mais próximo | chunks e QMC em alta dimensão | Limite de RAM | Preservado |
-| Cardinalidade igual | `comparacao_fronteiras`, 13–19 | clusterização hierárquica Ward e representante real mais próximo do centroide | alvo = menor cardinalidade válida no bloco | Comparação pareada | Preservado |
+| Cardinalidade igual | `comparacao_fronteiras`, 13–19 | FPS, K-Means, MiniBatch K-Means, GMM e Ward avaliados; K-Means com representante real selecionado no FULL | alvo = menor cardinalidade válida no bloco; semente final 42 | Comparação pareada | Alterado com autorização; benchmark auditável no notebook 08 |
 | Ground truth | `pareto_8D`, 5–16 | referência separada do ajuste/otimização | casco convexo analítico das âncoras | Fronteira verdadeira conhecida | Adaptação necessária e aprovada |
 
 ## Orientação canônica
