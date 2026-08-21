@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from itertools import combinations
 from pathlib import Path
 
@@ -215,6 +216,33 @@ def main() -> None:
     for relative in figure_paths:
         artifact = ROOT / relative
         assert artifact.exists() and artifact.stat().st_size > 1000, f"Figura ausente/vazia: {relative}"
+
+    overlay_root = figures / "method_front_overlays"
+    overlay = pd.read_csv(overlay_root / f"{args.mode.lower()}_method_front_overlay_manifest.csv")
+    require_columns(
+        overlay,
+        {
+            "scenario", "method", "seed", "IGD", "IGD_median", "page",
+            "objective_i", "objective_j", "n_method", "n_method_plotted",
+            "page_png", "atlas_pdf",
+        },
+        "method_front_overlay_manifest",
+    )
+    complete_metrics = metrics[metrics.comparison.eq("complete")]
+    expected_overlays = set(zip(complete_metrics.scenario, complete_metrics.method))
+    actual_overlays = set(zip(overlay.scenario, overlay.method))
+    assert actual_overlays == expected_overlays, "Métodos/cenários ausentes nas sobreposições"
+    assert overlay.groupby(["scenario", "method"]).seed.nunique().eq(1).all()
+    assert overlay.groupby(["scenario", "method"]).atlas_pdf.nunique().eq(1).all()
+    for (scenario, method), group in overlay.groupby(["scenario", "method"]):
+        m = int(scenario.split("_")[0][1:])
+        assert len(group) == math.comb(m, 2), f"Projeções incompletas: {scenario}/{method}"
+        assert not group.duplicated(["objective_i", "objective_j"]).any()
+        assert group.n_method.astype(int).gt(0).all()
+    overlay_paths = set(overlay.page_png) | set(overlay.atlas_pdf)
+    for relative in overlay_paths:
+        artifact = ROOT / relative
+        assert artifact.exists() and artifact.stat().st_size > 1000, f"Sobreposição ausente/vazia: {relative}"
     print(f"{args.mode}: manifestos científicos aprovados.")
 
 

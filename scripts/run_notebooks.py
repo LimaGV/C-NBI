@@ -26,6 +26,7 @@ ORDER = [
     "02_calibracao_NSGAIII_MOEAD.ipynb",
     "04_analise_resultados.ipynb",
     "05_figuras_cenarios_sinteticos.ipynb",
+    "06_sobreposicao_fronteiras_metodos.ipynb",
 ]
 
 

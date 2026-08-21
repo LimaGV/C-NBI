@@ -73,6 +73,7 @@ O executor atual é sequencial — portanto permanece abaixo do limite de três 
 - `data/`: artefatos gerados não versionados.
 - `results/`: checkpoints, calibração, tabelas e figuras não versionadas.
 - `notebooks/05_figuras_cenarios_sinteticos.ipynb`: superfícies RSM, mapas de contorno e projeções das fronteiras de Pareto verdadeiras.
+- `notebooks/06_sobreposicao_fronteiras_metodos.ipynb`: sobreposições separadas de cada método válido sobre a fronteira verdadeira.
 - `docs/`: método, protocolo e mapeamento célula a célula da v0.
 
 Notebooks são versionados sem outputs; `nbstripout`, pre-commit e CI verificam isso. Checkpoints permitem continuação após interrupção.
