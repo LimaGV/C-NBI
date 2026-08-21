@@ -25,6 +25,7 @@ ORDER = [
     "03_pipeline_CNBI_comparacoes.ipynb",
     "02_calibracao_NSGAIII_MOEAD.ipynb",
     "04_analise_resultados.ipynb",
+    "05_figuras_cenarios_sinteticos.ipynb",
 ]
 
 

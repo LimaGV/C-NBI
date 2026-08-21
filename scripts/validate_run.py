@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from itertools import combinations
 from pathlib import Path
 
 import numpy as np
@@ -169,6 +170,51 @@ def main() -> None:
         assert float(resources[key]) >= 0
     if args.mode == "PILOT":
         assert resources["cache_used"] is False and resources["checkpoints_reused"] == 0
+
+    figures = ROOT / "results" / "figures"
+    surface_manifest = pd.read_csv(figures / f"{args.mode.lower()}_response_surface_manifest.csv")
+    pareto_manifest = pd.read_csv(figures / f"{args.mode.lower()}_true_pareto_manifest.csv")
+    require_columns(
+        surface_manifest,
+        {"mode", "scenario", "objective", "rsm_seed", "slice_fixed_value", "png", "atlas_pdf"},
+        "response_surface_manifest",
+    )
+    require_columns(
+        pareto_manifest,
+        {
+            "mode", "scenario", "page", "objective_i", "objective_j", "page_png",
+            "overview_png", "overview_pdf", "pairwise_pdf",
+        },
+        "true_pareto_manifest",
+    )
+    expected_surface = {
+        (scenario, objective)
+        for scenario in scenarios
+        for objective in range(1, int(scenario.split("_")[0][1:]) + 1)
+    }
+    actual_surface = set(zip(surface_manifest.scenario, surface_manifest.objective.astype(int)))
+    assert actual_surface == expected_surface, "Cobertura incompleta das superfícies de resposta"
+    expected_pairs = {
+        (scenario, i, j)
+        for scenario in scenarios
+        for i, j in combinations(range(1, int(scenario.split("_")[0][1:]) + 1), 2)
+    }
+    actual_pairs = set(
+        zip(
+            pareto_manifest.scenario,
+            pareto_manifest.objective_i.astype(int),
+            pareto_manifest.objective_j.astype(int),
+        )
+    )
+    assert actual_pairs == expected_pairs, "Cobertura incompleta das projeções da fronteira verdadeira"
+    figure_paths = (
+        set(surface_manifest.png) | set(surface_manifest.atlas_pdf)
+        | set(pareto_manifest.page_png) | set(pareto_manifest.overview_png)
+        | set(pareto_manifest.overview_pdf) | set(pareto_manifest.pairwise_pdf)
+    )
+    for relative in figure_paths:
+        artifact = ROOT / relative
+        assert artifact.exists() and artifact.stat().st_size > 1000, f"Figura ausente/vazia: {relative}"
     print(f"{args.mode}: manifestos científicos aprovados.")
 
 

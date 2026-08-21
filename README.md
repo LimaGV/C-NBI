@@ -72,6 +72,7 @@ O executor atual é sequencial — portanto permanece abaixo do limite de três 
 - `configs/`: modos SMOKE, PILOT e FULL.
 - `data/`: artefatos gerados não versionados.
 - `results/`: checkpoints, calibração, tabelas e figuras não versionadas.
+- `notebooks/05_figuras_cenarios_sinteticos.ipynb`: superfícies RSM, mapas de contorno e projeções das fronteiras de Pareto verdadeiras.
 - `docs/`: método, protocolo e mapeamento célula a célula da v0.
 
 Notebooks são versionados sem outputs; `nbstripout`, pre-commit e CI verificam isso. Checkpoints permitem continuação após interrupção.
