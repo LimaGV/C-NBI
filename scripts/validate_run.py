@@ -243,6 +243,43 @@ def main() -> None:
     for relative in overlay_paths:
         artifact = ROOT / relative
         assert artifact.exists() and artifact.stat().st_size > 1000, f"Sobreposição ausente/vazia: {relative}"
+
+    combined_root = figures / "selected_combined_projections"
+    combined = pd.read_csv(combined_root / f"{args.mode.lower()}_selected_combined_projection_manifest.csv")
+    require_columns(
+        combined,
+        {
+            "scenario", "dimension", "projection", "objective_i", "objective_j",
+            "objective_k", "methods", "method_seeds", "n_methods", "png", "pdf",
+            "plate_png", "plate_pdf", "view_elev", "view_azim",
+        },
+        "selected_combined_projection_manifest",
+    )
+    expected_projections = {
+        "m4_medium": {"2D": {(1, 2), (3, 4)}, "3D": {(1, 2, 3), (2, 3, 4)}},
+        "m6_low": {"2D": {(1, 2), (3, 4), (5, 6)}, "3D": {(1, 2, 3), (4, 5, 6)}},
+        "m6_medium": {"2D": {(1, 2), (3, 4), (5, 6)}, "3D": {(1, 2, 3), (4, 5, 6)}},
+        "m12_high": {"2D": {(1, 2), (6, 7), (11, 12)}, "3D": {(1, 2, 3), (5, 6, 7), (10, 11, 12)}},
+    }
+    assert set(combined.scenario) == set(expected_projections), "Cenários incorretos nas projeções selecionadas"
+    for scenario, dimensions in expected_projections.items():
+        valid_methods = set(complete_metrics.loc[complete_metrics.scenario.eq(scenario), "method"])
+        for dimension, projections in dimensions.items():
+            group = combined[(combined.scenario == scenario) & (combined.dimension == dimension)]
+            columns = ["objective_i", "objective_j"] + (["objective_k"] if dimension == "3D" else [])
+            actual = {tuple(int(value) for value in row) for row in group[columns].itertuples(index=False, name=None)}
+            assert actual == projections, f"Projeções {dimension} incorretas: {scenario}"
+            assert group.n_methods.astype(int).eq(len(valid_methods)).all()
+            assert group.methods.map(lambda value: set(value.split("|"))).eq(valid_methods).all()
+            assert group.plate_png.nunique() == 1 and group.plate_pdf.nunique() == 1
+            if dimension == "3D":
+                assert np.allclose(group.view_elev, 35.264) and np.allclose(group.view_azim, -45.0)
+            else:
+                assert group.objective_k.isna().all() and group.view_elev.isna().all() and group.view_azim.isna().all()
+    combined_paths = set(combined.png) | set(combined.pdf) | set(combined.plate_png) | set(combined.plate_pdf)
+    for relative in combined_paths:
+        artifact = ROOT / relative
+        assert artifact.exists() and artifact.stat().st_size > 1000, f"Projeção combinada ausente/vazia: {relative}"
     print(f"{args.mode}: manifestos científicos aprovados.")
 
 

@@ -27,6 +27,7 @@ ORDER = [
     "04_analise_resultados.ipynb",
     "05_figuras_cenarios_sinteticos.ipynb",
     "06_sobreposicao_fronteiras_metodos.ipynb",
+    "07_projecoes_comparativas_2D_3D.ipynb",
 ]
 
 
