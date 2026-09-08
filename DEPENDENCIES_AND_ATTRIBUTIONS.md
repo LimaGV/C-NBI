@@ -6,6 +6,7 @@ Autoria oficial declarada para a implementação consolidada:
 
 - Gabriel Victor de Lima;
 - Mirelli de Castro Cesário;
+- Matheus Costa Pereira;
 - Anderson Paulo de Paiva.
 
 Esta declaração registra autoria, sem atribuir percentuais de contribuição, titularidade patrimonial ou vínculo institucional específico.

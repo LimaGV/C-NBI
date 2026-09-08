@@ -10,6 +10,7 @@ readme = "README.md"
 authors = [
     {name = "Gabriel Victor de Lima"},
     {name = "Mirelli de Castro Cesário"},
+    {name = "Matheus Costa Pereira"},
     {name = "Anderson Paulo de Paiva"},
 ]
 requires-python = "==3.10.11"

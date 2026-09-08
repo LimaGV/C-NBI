@@ -13,7 +13,7 @@
 - promovida a candidata para uma raiz Git limpa, com materiais locais excluídos;
 - adicionados atributos de texto/binário e verificação automática pelo GitHub Actions;
 - sanitizados caminhos pessoais nos inventários públicos, preservando os originais na área local ignorada.
-- registrada a autoria oficial de Gabriel Victor de Lima, Mirelli de Castro Cesário e Anderson Paulo de Paiva nos metadados e na citação do software.
+- registrada a autoria oficial, nesta ordem, de Gabriel Victor de Lima, Mirelli de Castro Cesário, Matheus Costa Pereira e Anderson Paulo de Paiva nos metadados e na citação do software.
 
 ## 1.0.0rc1 — 2026-09-08
 

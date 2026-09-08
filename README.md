@@ -123,6 +123,7 @@ Autores oficiais declarados:
 
 - Gabriel Victor de Lima;
 - Mirelli de Castro Cesário;
+- Matheus Costa Pereira;
 - Anderson Paulo de Paiva.
 
 O arquivo `CITATION.cff` fornece esses nomes em formato reconhecido pelo GitHub e por gerenciadores bibliográficos. Veja `DEPENDENCIES_AND_ATTRIBUTIONS.md`. `ORIGINAL_LICENSE.txt` preserva o aviso MIT encontrado no repositório de origem. A autoria está definida; a candidata ainda não declara titularidade institucional nem cria uma nova licença, pois essas decisões permanecem pendentes.
