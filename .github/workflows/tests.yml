@@ -9,7 +9,8 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # O checkpoint histórico exige igualdade bit a bit e foi gerado no Windows.
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v7
