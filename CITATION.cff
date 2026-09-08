@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Se você usar este software, cite-o usando estes metadados."
+type: software
+title: "CNBI — Combinatorial Normal Boundary Intersection"
+version: 1.0.0rc2
+authors:
+  - family-names: "de Lima"
+    given-names: "Gabriel Victor"
+  - family-names: "Cesário"
+    given-names: "Mirelli de Castro"
+  - family-names: "de Paiva"
+    given-names: "Anderson Paulo"
+repository-code: "https://github.com/LimaGV/C-NBI"

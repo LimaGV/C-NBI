@@ -9,6 +9,7 @@ Fonte: checkout de trabalho local `CNBI-Synthetic-Benchmarks/`, excluído do rep
 - Modularização Python expressamente solicitada prevalece sobre a regra histórica de manter metodologia em notebooks do AGENTS.md original.
 - Em 2026-09-08, o autor definiu 500 iterações como padrão configurável no payoff e NBI; os sete starts do payoff permanecem padrão e uma lista explícita permite alterar sua quantidade.
 - A fronteira bruta é sempre entregue. A remoção de duplicatas e dominadas é opcional, com tolerâncias configuráveis, e aceita separadamente avaliações RSM estimadas ou avaliações reais externas.
+- Autores oficiais declarados em 2026-09-08: Gabriel Victor de Lima, Mirelli de Castro Cesário e Anderson Paulo de Paiva. Titularidade patrimonial e licença permanecem decisões separadas.
 
 ## Mapa reconstruído antes da consolidação
 
@@ -46,7 +47,7 @@ Células numeradas a partir de 1, incluindo Markdown; documentos antigos usam ou
 | D12 | 13,25–28 e scripts de benchmark aplicado | Caminhos pessoais absolutos; figuras leem arquivos externos | Não portável | Excluir auxiliares; não alterar originais |
 | D13 | README versus scripts/run_notebooks.py | README diz FULL bloqueado incondicionalmente; executor permite --confirm-full | Documentação operacional desatualizada | Não executar FULL; executor não integra candidata |
 | D14 | v0 build_design_matrix/PA; 03 ajuste no escopo de campanha | v0 pinv; sintético inv(DᵀD), três variáveis fixas e minimização em todos os objetivos | Generalização não demonstrada | Limitar API ao RSM sintético existente; sem solver/normalização novos |
-| D15 | LICENSE/CITATION.cff/references | MIT com aviso LimaGV existe; não foi fornecida aprovação institucional específica; atribuições de trechos não são comprováveis só pelo código | Autoria/licenciamento institucional requerem confirmação documental | Preservar aviso existente sem inventar titularidade ou nova licença |
+| D15 | LICENSE/CITATION.cff/references | MIT com aviso LimaGV existe; os três autores foram declarados nesta auditoria; titularidade patrimonial e autorização institucional não foram definidas | Licenciamento e titularidade ainda exigem confirmação documental | Autoria registrada em `CITATION.cff`; preservar aviso existente sem inventar titularidade ou nova licença |
 | D16 | scripts/run_notebooks.py; notebook 06, cél. 4 | O SMOKE desativa otimizadores, então o notebook 04 não cria `smoke_method_runs.csv`; o executor ainda chama o notebook 06, que exige esse arquivo | O smoke completo sempre pode falhar depois de validar o núcleo e o notebook 05 | Não alterar o experimento durante a consolidação; corrigir em decisão versionada separada |
 
 ## Auditoria estática original

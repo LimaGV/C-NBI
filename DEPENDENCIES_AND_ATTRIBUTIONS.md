@@ -2,6 +2,14 @@
 
 ## Núcleo CNBI
 
+Autoria oficial declarada para a implementação consolidada:
+
+- Gabriel Victor de Lima;
+- Mirelli de Castro Cesário;
+- Anderson Paulo de Paiva.
+
+Esta declaração registra autoria, sem atribuir percentuais de contribuição, titularidade patrimonial ou vínculo institucional específico.
+
 Os arquivos `cnbi/core.py`, `spectral.py`, `combinations.py` e a orquestração em `nbi.py` constituem a implementação computacional selecionada do método CNBI. A afirmação se refere à organização autoral do procedimento; SVD, NBI, SLSQP, RSM, Simplex-Lattice e Pareto são métodos matemáticos preexistentes.
 
 `cnbi/rsm.py`, `payoff.py` e `pareto.py` são componentes científicos auxiliares. Não há código de NSGA-III, MOEA/D ou VRF-NBI na candidata.
@@ -31,10 +39,10 @@ O repositório experimental também usa pandas, matplotlib, seaborn, statsmodels
 - SLSQP: fornecido por SciPy; a candidata apenas formula objetivo/restrições/jacobianas.
 - `numpy.linalg.svd` e `scipy.linalg.null_space`: rotinas de biblioteca, sem incorporação de seu código-fonte.
 
-Não foi encontrado cabeçalho de proveniência indicando que os corpos extraídos do notebook 03 foram copiados de terceiros. Essa ausência não prova autoria jurídica. `provenance/EXTRACTION.json` registra a origem interna exata de cada função.
+Não foi encontrado cabeçalho de proveniência indicando que os corpos extraídos do notebook 03 foram copiados de terceiros. `provenance/EXTRACTION.json` registra a origem interna exata de cada função. A autoria oficial desta candidata foi declarada posteriormente pelos responsáveis e está registrada acima e em `CITATION.cff`.
 
 ## Licença da candidata
 
-O repositório de origem contém uma licença MIT com aviso `Copyright (c) 2026 LimaGV`, preservada integralmente em `ORIGINAL_LICENSE.txt`. Não foi fornecida documentação institucional que autorize atribuir titularidade à UNIFEI/INPI ou confirme que esse aviso deve reger o pacote registrável. Por isso o `pyproject.toml` não declara licença e nenhum novo texto jurídico foi criado.
+O repositório de origem contém uma licença MIT com aviso `Copyright (c) 2026 LimaGV`, preservada integralmente em `ORIGINAL_LICENSE.txt`. A definição dos três autores não determina automaticamente o titular dos direitos patrimoniais nem confirma se esse aviso deve reger o pacote registrável. Por isso o `pyproject.toml` ainda não declara licença e nenhum novo texto jurídico foi criado.
 
-Decisão humana necessária antes do congelamento: confirmar titular(es), aviso de copyright e licença de distribuição, preservando os avisos das bibliotecas.
+Decisão humana ainda necessária antes do congelamento: confirmar titular(es), aviso de copyright e licença de distribuição, preservando os avisos das bibliotecas.

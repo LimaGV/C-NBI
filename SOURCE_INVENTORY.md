@@ -31,7 +31,7 @@
 
 - `README.md`, `CHANGELOG.md`, `TRACEABILITY.md`, `PARAMETERS.md`, `VERIFICATION_REPORT.md`
 - `DEPENDENCIES_AND_ATTRIBUTIONS.md`, `AUDIT_REPORT.md`, `SUGESTOES_POS_V1.md`
-- `SOURCE_INVENTORY.md`, `ORIGINAL_LICENSE.txt`
+- `SOURCE_INVENTORY.md`, `CITATION.cff`, `ORIGINAL_LICENSE.txt`
 - `provenance/EXTRACTION.json`, `PROJECT_INVENTORY.json`, `STATIC_ANALYSIS.json`, `NORMALIZATION_IMPACT.json`
 
 Os inventários públicos substituem apenas o prefixo absoluto do perfil local por `<USER_HOME>`. As cópias integrais anteriores à sanitização permanecem na área ignorada `CNBI_audit/private_provenance/` e não devem ser enviadas ao GitHub.

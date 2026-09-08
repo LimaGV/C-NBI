@@ -1,6 +1,6 @@
 # CNBI — Combinatorial Normal Boundary Intersection
 
-Versão explícita: **1.0.0rc2**, candidata técnica ainda não congelada. A implementação foi extraída conservadoramente do `notebooks/03_pipeline_CNBI_comparacoes.ipynb`, escolhido pelo autor nesta auditoria como referência normativa. A rc2 acrescenta parâmetros autorizados e pós-processamento opcional sem mudar os padrões numéricos.
+Versão explícita: **1.0.0rc2**, candidata técnica ainda não congelada. A implementação foi extraída conservadoramente do `notebooks/03_pipeline_CNBI_comparacoes.ipynb`, selecionado nesta auditoria como referência normativa. A rc2 acrescenta parâmetros autorizados e pós-processamento opcional sem mudar os padrões numéricos.
 
 ## Finalidade
 
@@ -119,7 +119,13 @@ O workflow `.github/workflows/tests.yml` repete a instalação, a suíte e o exe
 
 ## Dependências, autoria e licença
 
-Veja `DEPENDENCIES_AND_ATTRIBUTIONS.md`. `ORIGINAL_LICENSE.txt` preserva o aviso MIT encontrado no repositório de origem. A candidata não declara titularidade institucional nem cria uma nova licença; a decisão institucional permanece pendente.
+Autores oficiais declarados:
+
+- Gabriel Victor de Lima;
+- Mirelli de Castro Cesário;
+- Anderson Paulo de Paiva.
+
+O arquivo `CITATION.cff` fornece esses nomes em formato reconhecido pelo GitHub e por gerenciadores bibliográficos. Veja `DEPENDENCIES_AND_ATTRIBUTIONS.md`. `ORIGINAL_LICENSE.txt` preserva o aviso MIT encontrado no repositório de origem. A autoria está definida; a candidata ainda não declara titularidade institucional nem cria uma nova licença, pois essas decisões permanecem pendentes.
 
 ## Estado da versão
 
