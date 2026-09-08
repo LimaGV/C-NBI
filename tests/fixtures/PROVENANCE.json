@@ -1,0 +1,40 @@
+[
+  {
+    "fixture": "historical_m4_low_seed103.npz",
+    "source": "results/synthetic/checkpoints/full_m4_low_seed103_CNBI_071001488d2e.npz",
+    "fields": [
+      "X",
+      "F_rsm",
+      "success",
+      "k",
+      "beta_id",
+      "combo_json",
+      "beta_json",
+      "eq_inf",
+      "sphere_violation",
+      "start",
+      "attempts",
+      "execution_order",
+      "accepted",
+      "solver_success",
+      "subproblem_status",
+      "t",
+      "attempt_log_json"
+    ]
+  },
+  {
+    "fixture": "m4_low_seed103.json",
+    "source": "notebook 03 cell 4 lines 47-48; data/generated/m4_low_scenario.npz",
+    "construction": "same CCD, Gaussian observations and OLS expressions; no truth callable enters package"
+  },
+  {
+    "fixture": "m6_medium_seed101.json",
+    "source": "notebook 03 cell 4 lines 47-48; data/generated/m6_medium_scenario.npz",
+    "construction": "same CCD, Gaussian observations and OLS expressions; no truth callable enters package"
+  },
+  {
+    "fixture": "m12_high_seed101.json",
+    "source": "notebook 03 cell 4 lines 47-48; data/generated/m12_high_scenario.npz",
+    "construction": "same CCD, Gaussian observations and OLS expressions; no truth callable enters package"
+  }
+]

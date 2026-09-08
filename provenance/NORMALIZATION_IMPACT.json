@@ -1,0 +1,71 @@
+{
+  "purpose": "audit only; global normalization is not included in the package API",
+  "local_definition": "notebook 03: each subproblem recomputes ideal/range from its reduced payoff",
+  "global_definition": "v0-style audit: each subproblem uses ideal/range of the full payoff restricted to its objectives",
+  "selection": "identical global spectral selection; only NBI local normalization changes",
+  "records": [
+    {
+      "fixture": "m4_low_seed103",
+      "objectives": 4,
+      "combinations": 11,
+      "raw_candidates_each": 386,
+      "accepted_local": 386,
+      "accepted_global": 386,
+      "same_acceptance_status": 386,
+      "decision_distance_median": 0.0,
+      "decision_distance_p95": 0.19626293958243463,
+      "decision_distance_max": 0.282182292164981,
+      "same_decision_within_1e-8": 215,
+      "estimated_pareto_rows_local_exact": 309,
+      "estimated_pareto_rows_global_exact": 314,
+      "estimated_postprocessed_rows_local_default": 285,
+      "estimated_postprocessed_rows_global_default": 290,
+      "normalized_front_symmetric_nearest": {
+        "median": 0.0,
+        "max": 0.1390181600602146
+      }
+    },
+    {
+      "fixture": "m6_medium_seed101",
+      "objectives": 6,
+      "combinations": 45,
+      "raw_candidates_each": 2045,
+      "accepted_local": 2045,
+      "accepted_global": 2045,
+      "same_acceptance_status": 2045,
+      "decision_distance_median": 0.04547008048398685,
+      "decision_distance_p95": 0.18210669858913436,
+      "decision_distance_max": 0.3536698060179489,
+      "same_decision_within_1e-8": 369,
+      "estimated_pareto_rows_local_exact": 1045,
+      "estimated_pareto_rows_global_exact": 1043,
+      "estimated_postprocessed_rows_local_default": 921,
+      "estimated_postprocessed_rows_global_default": 919,
+      "normalized_front_symmetric_nearest": {
+        "median": 0.013619299421418889,
+        "max": 0.16307354984353567
+      }
+    },
+    {
+      "fixture": "m12_high_seed101",
+      "objectives": 12,
+      "combinations": 56,
+      "raw_candidates_each": 1706,
+      "accepted_local": 1706,
+      "accepted_global": 1705,
+      "same_acceptance_status": 1705,
+      "decision_distance_median": 0.008196327423472028,
+      "decision_distance_p95": 0.13766941869166938,
+      "decision_distance_max": 2.8062136645447824,
+      "same_decision_within_1e-8": 142,
+      "estimated_pareto_rows_local_exact": 667,
+      "estimated_pareto_rows_global_exact": 649,
+      "estimated_postprocessed_rows_local_default": 546,
+      "estimated_postprocessed_rows_global_default": 528,
+      "normalized_front_symmetric_nearest": {
+        "median": 0.01014831800051151,
+        "max": 0.14140366244966732
+      }
+    }
+  ]
+}

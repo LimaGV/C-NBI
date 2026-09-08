@@ -1,0 +1,8 @@
+# Origem: notebook 04, célula 6; critério original aplicado a ground truth.
+import numpy as np
+
+def nondominated(F):
+    F=np.asarray(F,float); keep=np.ones(len(F),bool)
+    for i in range(len(F)):
+        if keep[i]: keep[i]=not np.any(np.all(F<=F[i],axis=1)&np.any(F<F[i],axis=1))
+    return keep

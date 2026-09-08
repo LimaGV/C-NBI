@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+examples/output/
+.pytest_cache/
+.coverage
+htmlcov/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Materiais locais de pesquisa e verificação; não integram a CNBI v1.0.
+/CNBI-Synthetic-Benchmarks/
+/CNBI-Synthetic-Benchmarks.zip
+/CNBI_audit/
+/CNBI_build_artifacts_rc*/
+/CNBI_clean_env_rc*/
+/CNBI_generated_cleanup_rc*/
+/docx_qa/

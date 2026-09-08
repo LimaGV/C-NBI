@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools==65.5.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cnbi"
+version = "1.0.0rc2"
+description = "CNBI — extração conservadora do pipeline sintético normativo"
+readme = "README.md"
+requires-python = "==3.10.11"
+dependencies = ["numpy==1.26.4", "scipy==1.14.1"]
+
+[tool.setuptools]
+packages = ["cnbi"]
+
+[tool.setuptools.data-files]
+"share/cnbi" = ["ORIGINAL_LICENSE.txt"]

@@ -1,0 +1,6 @@
+include ORIGINAL_LICENSE.txt
+include README.md CHANGELOG.md TRACEABILITY.md DEPENDENCIES_AND_ATTRIBUTIONS.md
+include AUDIT_REPORT.md PARAMETERS.md SOURCE_INVENTORY.md SUGESTOES_POS_V1.md VERIFICATION_REPORT.md
+recursive-include examples *.py *.json *.md
+recursive-include tests *.py *.txt *.json *.npz
+recursive-include provenance *.json

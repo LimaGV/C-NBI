@@ -1,0 +1,88 @@
+{
+  "functions": [
+    {
+      "module": "cnbi/rsm.py",
+      "function": "z",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 42,
+      "end_line": 43
+    },
+    {
+      "module": "cnbi/rsm.py",
+      "function": "dz",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 44,
+      "end_line": 45
+    },
+    {
+      "module": "cnbi/payoff.py",
+      "function": "individual_payoff",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 47,
+      "end_line": 66
+    },
+    {
+      "module": "cnbi/spectral.py",
+      "function": "parallel_analysis",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 68,
+      "end_line": 77
+    },
+    {
+      "module": "cnbi/combinations.py",
+      "function": "simplex_weights",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 79,
+      "end_line": 80
+    },
+    {
+      "module": "cnbi/combinations.py",
+      "function": "_nearest_weight_order",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 88,
+      "end_line": 92
+    },
+    {
+      "module": "cnbi/nbi.py",
+      "function": "_solve_nbi_base",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 94,
+      "end_line": 145
+    },
+    {
+      "module": "cnbi/core.py",
+      "function": "cnbi",
+      "source": "notebooks/03_pipeline_CNBI_comparacoes.ipynb",
+      "cell_1based": 2,
+      "line_1based": 147,
+      "end_line": 155
+    }
+  ],
+  "duplicates": [
+    {
+      "function": "_nearest_weight_order",
+      "identical_ast": true,
+      "lines": [
+        82,
+        88
+      ]
+    }
+  ],
+  "authorized_extensions_2026_09_08": [
+    "payoff maxiter configurable with default 500",
+    "payoff starts explicit and configurable; canonical default count 7",
+    "NBI maxiter configurable with default 500",
+    "NBI maximum rescues configurable with default 8",
+    "raw candidates always returned",
+    "optional duplicate and dominance filtering with configurable tolerances",
+    "objective matrix supplied externally distinguishes estimated and real frontiers"
+  ],
+  "final_release_hash": null
+}

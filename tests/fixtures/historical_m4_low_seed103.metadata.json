@@ -1,0 +1,29 @@
+{
+  "status": "COMPLETED",
+  "expected_subproblems": 386,
+  "processed_subproblems": 386,
+  "infeasible_subproblems": 0,
+  "converged_fraction": 1.0,
+  "parallel_d": 3,
+  "cnbi_subproblem_evaluations": 15817,
+  "payoff_evaluations": 254,
+  "gradient_evaluations": 3496,
+  "rsm_evaluations": 16071,
+  "payoff_included": true,
+  "identity": {
+    "schema_version": 2,
+    "implementation_fingerprint": "common-nbi-infeasible-status-v3",
+    "mode": "FULL",
+    "scenario": "m4_low",
+    "method": "CNBI",
+    "dimension": 4,
+    "seed": 103,
+    "budget": null,
+    "parameters": {},
+    "stage": null,
+    "config_hash": "1e3d291077f2d2dd88b31c3ef00e401b89a16a63d49adc1c7a46af4afb066c3c",
+    "anchors_hash": "abe58466f10e4994728ab2e7aeb8398a1a1ebcc78e3b725c8d7372ee109bd7f7",
+    "rsm_hash": "7ec096fc089fcf4ccd818f0fd9fe9dd2df987b9d4bf3df7bc03c735ec47946ab",
+    "fingerprint": "1a814d987f3ccce4978c85955e7c36f5b055d84fe95846dfabc892e082aa178a"
+  }
+}
