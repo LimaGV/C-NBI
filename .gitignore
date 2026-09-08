@@ -22,3 +22,6 @@ Thumbs.db
 /CNBI_clean_env_rc*/
 /CNBI_generated_cleanup_rc*/
 /docx_qa/
+
+# Formulário administrativo com dados pessoais; manter somente local.
+/solicitação de registro.doc
