@@ -144,8 +144,8 @@ def main() -> None:
     parser.add_argument("--mode", choices=["PILOT", "FULL"], required=True)
     args = parser.parse_args()
     cfg = json.loads((ROOT / "configs" / f"{args.mode.lower()}.json").read_text(encoding="utf-8"))
-    tables = ROOT / "results" / "tables"
-    tuning = ROOT / "results" / "tuning"
+    tables = ROOT / "results" / "synthetic" / "tables"
+    tuning = ROOT / "results" / "synthetic" / "tuning"
 
     chosen = json.loads((tuning / "chosen_parameters.json").read_text(encoding="utf-8"))
     expected_keys = {
@@ -306,7 +306,7 @@ def main() -> None:
     if args.mode == "PILOT":
         assert resources["cache_used"] is False and resources["checkpoints_reused"] == 0
 
-    figures = ROOT / "results" / "figures"
+    figures = ROOT / "results" / "synthetic" / "figures"
     if args.mode == "FULL":
         reduction_figure_root = figures / "cardinality_reduction"
         for extension in ("png", "pdf"):

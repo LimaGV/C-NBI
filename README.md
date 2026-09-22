@@ -71,7 +71,8 @@ O executor atual é sequencial — portanto permanece abaixo do limite de três 
 - `notebooks/00_referencias_v0`: cópias sanitizadas das referências normativas.
 - `configs/`: modos SMOKE, PILOT e FULL.
 - `data/`: artefatos gerados não versionados.
-- `results/`: checkpoints, calibração, tabelas e figuras não versionadas.
+- `results/synthetic/`: checkpoints, calibração, tabelas, figuras, logs e históricos dos nove cenários sintéticos.
+- `results/applied/`: referência 8D, execuções com orçamento equalizado, comparações, figuras e logs do estudo aplicado.
 - `notebooks/05_figuras_cenarios_sinteticos.ipynb`: superfícies RSM, mapas de contorno e projeções das fronteiras de Pareto verdadeiras.
 - `notebooks/06_sobreposicao_fronteiras_metodos.ipynb`: sobreposições separadas de cada método válido sobre a fronteira verdadeira.
 - `notebooks/07_projecoes_comparativas_2D_3D.ipynb`: projeções 2D combinadas e vistas 3D isométricas para os cenários selecionados para o texto.
@@ -81,3 +82,18 @@ O executor atual é sequencial — portanto permanece abaixo do limite de três 
 Notebooks são versionados sem outputs; `nbstripout`, pre-commit e CI verificam isso. Checkpoints permitem continuação após interrupção.
 
 Licença MIT. Para citação, use `CITATION.cff`. O procedimento VRF-NBI segue Pereira et al. (2025), DOI [10.1016/j.engappai.2025.112510](https://doi.org/10.1016/j.engappai.2025.112510).
+
+## Acervo completo e dados
+
+Este checkout corresponde à linha de notebooks (`main`) do projeto C-NBI.
+O pacote e o acervo compactado ficam na linha `cnbi-v1.0` do mesmo repositório:
+https://github.com/LimaGV/C-NBI/tree/cnbi-v1.0
+
+Clone essa linha com `--recurse-submodules` e execute `python tools/research_archive.py restore`
+na raiz do projeto pai para recuperar dados, checkpoints, tabelas, figuras e planilhas
+nos caminhos originais deste diretório. Os ZIPs incluem inventário e hashes SHA-256.
+
+Os notebooks 09–28 também são versionados sem saídas de execução. As entradas aplicadas
+usam `data/applied/`, sem depender de caminhos pessoais. O modo SMOKE verifica a cadeia
+01/03/02/04; os notebooks de visualização 05–08 exigem a campanha completa e são omitidos
+nesse modo. As equações e os critérios científicos foram preservados.

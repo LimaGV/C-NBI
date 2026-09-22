@@ -94,6 +94,9 @@ def main() -> None:
     started_cpu = time.process_time()
     order = ORDER[:1] if args.mode == "SCENARIO_AUDIT" else ORDER
     for name in order:
+        if args.mode == "SMOKE" and name[:2] in {"05", "06", "07"}:
+            print(f"SKIP (SMOKE): {name} requer os nove cenarios completos", flush=True)
+            continue
         if name == "08_clusterizacao_equalizacao_cardinalidade.ipynb" and args.mode != "FULL":
             print(f"SKIP ({args.mode}): {name} requer os 90 blocos FULL", flush=True)
             continue
@@ -107,14 +110,14 @@ def main() -> None:
         import gc
         gc.collect()
     if args.mode == "PILOT":
-        tables = ROOT / "results" / "tables"
+        tables = ROOT / "results" / "synthetic" / "tables"
         tables.mkdir(parents=True, exist_ok=True)
         with (tables / "pilot_method_runs.csv").open(encoding="utf-8", newline="") as stream:
             method_rows = list(csv.DictReader(stream))
-        with (ROOT / "results" / "tuning" / "tuning_all_results.csv").open(encoding="utf-8", newline="") as stream:
+        with (ROOT / "results" / "synthetic" / "tuning" / "tuning_all_results.csv").open(encoding="utf-8", newline="") as stream:
             tuning_rows = list(csv.DictReader(stream))
         reused = sum(str(row.get("checkpoint_reused", "false")).lower() == "true" for row in method_rows + tuning_rows)
-        disk_bytes = sum(p.stat().st_size for base in (ROOT / "data", ROOT / "results") for p in base.rglob("*") if p.is_file() and "backups" not in p.parts)
+        disk_bytes = sum(p.stat().st_size for base in (ROOT / "data", ROOT / "results" / "synthetic") for p in base.rglob("*") if p.is_file() and "backups" not in p.parts)
         resource = {
             "schema_version": 2,
             "mode": args.mode,

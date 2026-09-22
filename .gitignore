@@ -15,16 +15,17 @@ data/generated/*
 !data/generated/.gitkeep
 data/reference_fronts/*
 !data/reference_fronts/.gitkeep
-results/checkpoints/*
-!results/checkpoints/.gitkeep
-results/tuning/*
-!results/tuning/.gitkeep
-results/tables/*
-!results/tables/.gitkeep
-results/figures/*
-!results/figures/.gitkeep
-results/backups/
-results/logs/
+results/synthetic/checkpoints/*
+!results/synthetic/checkpoints/.gitkeep
+results/synthetic/tuning/*
+!results/synthetic/tuning/.gitkeep
+results/synthetic/tables/*
+!results/synthetic/tables/.gitkeep
+results/synthetic/figures/*
+!results/synthetic/figures/.gitkeep
+results/synthetic/backups/
+results/synthetic/logs/
+results/applied/
 dist/
 *.parquet
 *.npz
@@ -34,3 +35,14 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+
+# Local scratch work; useful artifacts are archived by the parent project.
+/tmp/
+/output/
+/outputs/
+/tmp_*.csv
+node_modules/
+~$*
+*.log
+# Applied inputs are restored from the parent project's research archives.
+/data/applied/

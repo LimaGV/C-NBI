@@ -155,7 +155,7 @@ Valores abaixo são medianas das duas sementes do PILOT. Menor é melhor para GD
 
 No PILOT, CNBI apresentou a melhor cobertura global pelos critérios IGD e HV nas duas dimensões. Os menores valores de GD dos algoritmos evolutivos indicam proximidade dos pontos retornados à referência, mas o IGD elevado revela cobertura insuficiente da extensão da fronteira. Essa observação é descritiva e não constitui conclusão inferencial.
 
-Na comparação com cardinalidade igual, o CNBI permaneceu competitivo, mas as diferenças foram reduzidas, especialmente em `m=4`. As tabelas completas estão em `results/tables/pilot_metrics.csv` e `pilot_summary.csv`.
+Na comparação com cardinalidade igual, o CNBI permaneceu competitivo, mas as diferenças foram reduzidas, especialmente em `m=4`. As tabelas completas estão em `results/synthetic/tables/pilot_metrics.csv` e `pilot_summary.csv`.
 
 ## 11. Estatística
 

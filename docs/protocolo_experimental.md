@@ -7,7 +7,7 @@
 
 SMOKE valida estrutura e invariantes, mas não produz evidência científica. PILOT estima custo. FULL requer confirmação explícita e nunca é iniciado pela CI.
 
-Antes do PILOT, execute `python scripts/run_notebooks.py --mode SCENARIO_AUDIT` e `python scripts/validate_scenarios.py`. Resultados anteriores são movidos para `results/backups/<data>/`, nunca apagados silenciosamente. A campanha limpa começa apenas com `.gitkeep` nos diretórios ativos.
+Antes do PILOT, execute `python scripts/run_notebooks.py --mode SCENARIO_AUDIT` e `python scripts/validate_scenarios.py`. Resultados anteriores são movidos para `results/synthetic/backups/<data>/`, nunca apagados silenciosamente. A campanha limpa começa apenas com `.gitkeep` nos diretórios ativos.
 
 O estágio B usa 12 configurações balanceadas: 6 por `n_partitions`, 6 por probabilidade SBX, 4 por eta SBX e 4 por eta PM, sem duplicatas. O vencedor é congelado somente depois da validação dos três finalistas nas seeds 1–3 pelos cinco critérios lexicográficos.
 
