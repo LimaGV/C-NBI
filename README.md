@@ -1,5 +1,7 @@
 # CNBI — Combinatorial Normal Boundary Intersection
 
+> **Projeto completo:** consulte [ORGANIZACAO.md](ORGANIZACAO.md) para código experimental, notebooks, manuscritos e restauração de todos os dados e resultados. O pacote `cnbi` mantém seu escopo original.
+
 Versão explícita: **1.0.0rc2**, candidata técnica ainda não congelada. A implementação foi extraída conservadoramente do `notebooks/03_pipeline_CNBI_comparacoes.ipynb`, selecionado nesta auditoria como referência normativa. A rc2 acrescenta parâmetros autorizados e pós-processamento opcional sem mudar os padrões numéricos.
 
 ## Finalidade

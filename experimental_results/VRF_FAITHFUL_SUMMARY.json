@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "implementation": "Pereira et al. (2025), equations 11 and 17-28",
+  "tests": "11/11 passed",
+  "total_vrf_runs": 400,
+  "corrected_synthetic_DOE": {
+    "path": "experimental_results\\doe_legacy_generator_vrf_faithful",
+    "verification": {
+      "passed": true,
+      "runs": 270,
+      "failures": [],
+      "statuses": {
+        "COMPLETED": 270
+      },
+      "front_min": 2,
+      "front_max": 35,
+      "retention_min": 0.9013635833838802
+    }
+  },
+  "MaF_benchmarks": {
+    "path": "experimental_results\\full_campaign_vrf_faithful_final",
+    "verification": {
+      "passed": true,
+      "runs": 130,
+      "failures": [],
+      "statuses": {
+        "COMPLETED": 110,
+        "BUDGET_EXHAUSTED": 20
+      },
+      "front_min": 5,
+      "front_max": 12,
+      "retention_min": 0.9015631492209232
+    }
+  },
+  "note": "MaF9 m4 and m6 reached the common 50000-evaluation ceiling; all saved fronts are nonempty and feasible."
+}

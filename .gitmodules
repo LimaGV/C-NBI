@@ -1,0 +1,4 @@
+[submodule "CNBI-Synthetic-Benchmarks"]
+	path = CNBI-Synthetic-Benchmarks
+	url = https://github.com/LimaGV/C-NBI.git
+	branch = main

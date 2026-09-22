@@ -15,7 +15,6 @@ htmlcov/
 Thumbs.db
 
 # Materiais locais de pesquisa e verificação; não integram a CNBI v1.0.
-/CNBI-Synthetic-Benchmarks/
 /CNBI-Synthetic-Benchmarks.zip
 /CNBI_audit/
 /CNBI_build_artifacts_rc*/
@@ -25,3 +24,18 @@ Thumbs.db
 
 # Formulário administrativo com dados pessoais; manter somente local.
 /solicitação de registro.doc
+
+# Local-only material and generated artifacts
+/.local/
+/tmp/
+/Papper/~$*
+~$*
+.env
+.env.*
+*.pem
+*.key
+node_modules/
+.ipynb_checkpoints/
+*.log
+# Raw research data are published losslessly in research_archive/.
+/experimental_results/*/

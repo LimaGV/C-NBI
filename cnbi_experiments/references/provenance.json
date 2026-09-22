@@ -1,0 +1,11 @@
+{
+  "article": "https://doi.org/10.1007/s40747-017-0039-7",
+  "retrieved": "2026-09-08",
+  "repository": "https://github.com/BIMK/PlatEMO",
+  "revision": "d25e65d1ffba58dbf4d7e1b5259786187d12968a",
+  "sha256": {
+    "MaF13.m": "3f2abcb284339b8c2ac7a5be0feea9ff844a83ddcf0268ce80e60c433aa513b4",
+    "MaF8.m": "e1970fea5c3bcc7f417de93a665901bd56e2037e48ccc50047599f9a81342387",
+    "MaF9.m": "9cfc64eaa6fe3fef6d5d6672291bb6cc1106321f0ece67b9d5ccbe114aaed961"
+  }
+}
