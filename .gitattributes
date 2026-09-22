@@ -9,7 +9,7 @@ MANIFEST.in text eol=lf
 *.txt text eol=lf
 *.yml text eol=lf
 *.npz binary
-*.vbs text eol=crlf
+*.vbs binary
 *.zip binary
 *.docx binary
 *.pdf binary
